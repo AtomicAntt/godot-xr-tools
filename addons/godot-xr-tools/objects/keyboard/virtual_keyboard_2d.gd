@@ -23,6 +23,8 @@ var _alt_down := false
 # Current keyboard mode
 var _mode: int = KeyboardMode.LOWER_CASE
 
+# Viewport node to push input to
+@onready var _viewport: Viewport = get_viewport().get_parent().get_viewport()
 
 # Add support for is_xr_class on XRTools classes
 func is_xr_class(xr_name:  String) -> bool:
@@ -44,6 +46,8 @@ func on_key_pressed(scan_code_text: String, unicode: int, shift: bool):
 
 	# Dispatch the input event
 	Input.parse_input_event(input)
+	if _viewport != get_tree().root:
+		_viewport.push_input(input)
 
 	# Pop any temporary shift key
 	if _shift_down:
